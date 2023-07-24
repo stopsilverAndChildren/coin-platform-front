@@ -1,72 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>갤로그 게임</title>
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #f0f0f0;
-    }
-    img {
-      width: 200px;
-      height: 200px;
-      cursor: pointer;
-    }
-  </style>
+  <title>Tetris</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-  <h1>갤로그 게임</h1>
-  <div id="gameContainer">
-    <img id="gallog" src="gallog.png" alt="갤로그 이미지">
+  <div class="container">
+    <div class="tetris-grid" id="tetris-grid"></div>
   </div>
-  <script>
-    const gameContainer = document.getElementById('gameContainer');
-    const gallog = document.getElementById('gallog');
-    const scoreDisplay = document.createElement('p');
-    let score = 0;
-    let timerId;
-
-    function startGame() {
-      score = 0;
-      scoreDisplay.textContent = 'Score: 0';
-      gameContainer.appendChild(scoreDisplay);
-
-      function showGallog() {
-        const screenWidth = window.innerWidth;
-        const screenHeight = window.innerHeight;
-        const randomX = Math.floor(Math.random() * (screenWidth - 200));
-        const randomY = Math.floor(Math.random() * (screenHeight - 200));
-
-        gallog.style.left = randomX + 'px';
-        gallog.style.top = randomY + 'px';
-        gallog.style.display = 'block';
-      }
-
-      function hideGallog() {
-        gallog.style.display = 'none';
-      }
-
-      function clickHandler() {
-        score++;
-        scoreDisplay.textContent = 'Score: ' + score;
-        hideGallog();
-        clearTimeout(timerId);
-        showGallog();
-        timerId = setTimeout(clickHandler, Math.random() * 2000 + 1000);
-      }
-
-      gallog.addEventListener('click', clickHandler);
-      showGallog();
-      timerId = setTimeout(clickHandler, Math.random() * 2000 + 1000);
-    }
-
-    startGame();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>

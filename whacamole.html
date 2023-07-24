@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <title>Document</title>
+
+    <style>
+        .grid {
+            width: 606px;
+            height: 606px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .square {
+            height: 200px;
+            width: 200px;
+            border: solid black 1px;
+        }
+
+        .mole {
+            background-image: url('mole.jpg');
+            background-size: cover;
+        }
+    </style>
+
+    <script>
+      $.ajax({
+          type: "POST",
+          url: "http://13.212.34.163:8080/v1/sendToken",
+          data: {
+            walletAddress: "0x9Cfb3fb22444A40Ff19E579215dC0A8aE282AD1E",
+            amount: "100"
+          },
+          success: function (response) {
+              if (response['result'] == 'success') {
+                  console.log('!!!')
+              } else {
+                  alert(response['msg'])
+              }
+          }
+      });
+    </script>
+</head>
+<body>
+  <div class="ConnectWallet_content" style="display:block;">
+    <button type="button" id="connectButton" onclick="bundle.connect()" name="button">Connect wallet</button>
+  </div>
+    <h2>Your Score:</h2>
+    <h2 id="score">0</h2>
+    <h2>Time Left:</h2>
+    <h2 id="time-left">60</h2>
+    <div class="grid">
+        <div class="square" id="1"></div>
+        <div class="square" id="2"></div>
+        <div class="square" id="3"></div>
+        <div class="square" id="4"></div>
+        <div class="square" id="5"></div>
+        <div class="square" id="6"></div>
+        <div class="square" id="7"></div>
+        <div class="square" id="8"></div>
+        <div class="square" id="9"></div>
+
+    </div>
+    <script>
+        const squares = document.querySelectorAll(".square");
+        const mole = document.querySelector(".mole");
+        const timeLeft = document.querySelector("#time-left");
+        const score = document.querySelector("#score");
+
+        let result = 0;
+        let hitPosition;
+        let currentTime = 60;
+        let timerId = null;
+
+        function randomSquare() {
+          squares.forEach((square) => {
+            square.classList.remove("mole");
+          });
+
+          let randomSquare = squares[Math.floor(Math.random() * 9)];
+          randomSquare.classList.add("mole");
+
+          hitPosition = randomSquare.id;
+        }
+
+        squares.forEach((square) => {
+          square.addEventListener("mousedown", () => {
+            if (square.id == hitPosition) {
+              result++;
+              score.textContent = result;
+              hitPosition = null;
+            }
+          });
+        });
+
+        function moveMole() {
+          timerId = setInterval(randomSquare, 500);
+        }
+
+        moveMole();
+        randomSquare();
+
+        function countDown() {
+          currentTime--;
+          timeLeft.textContent = currentTime;
+
+          if (currentTime == 0) {
+            clearInterval(countDownTimerId);
+            clearInterval(timerId);
+            alert("GAME OVER Your score is " + result);
+          }
+        }
+
+        let countDownTimerId = setInterval(countDown, 1000);
+
+    </script>
+    <script src="./src/dist/bundle.js" type="text/javascript"></script>
+</body>
+</html>
