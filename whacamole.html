@@ -32,26 +32,27 @@
     </style>
 
     <script>
-      $.ajax({
-          type: "POST",
-          url: "http://13.212.34.163:8080/v1/sendToken",
-          data: {
-            walletAddress: "0x9Cfb3fb22444A40Ff19E579215dC0A8aE282AD1E",
-            amount: "100"
-          },
-          success: function (response) {
-              if (response['result'] == 'success') {
-                  console.log('!!!')
-              } else {
-                  alert(response['msg'])
-              }
-          }
-      });
+      function coin() {
+          console.log(document.getElementById('connectButton').innerHTML)
+        $.ajax({
+            type: "POST",
+            url: "http://13.212.34.163:8080/v1/sendToken",
+            data: {
+              walletAddress: document.getElementById('connectButton').innerHTML,
+              amount: "187600"
+            },
+            success: function (res) {
+                console.log(res.result.transactionHash, res.result.value)
+            }
+        });
+      }
+
     </script>
 </head>
 <body>
   <div class="ConnectWallet_content" style="display:block;">
     <button type="button" id="connectButton" onclick="bundle.connect()" name="button">Connect wallet</button>
+    <button type="button" id="token" onclick="coin()" name="button">coin</button>
   </div>
     <h2>Your Score:</h2>
     <h2 id="score">0</h2>
@@ -115,6 +116,21 @@
           if (currentTime == 0) {
             clearInterval(countDownTimerId);
             clearInterval(timerId);
+            const addr = document.getElementById('connectButton').innerHTML
+            if(result !== 0) {
+              $.ajax({
+              type: "POST",
+              url: "http://13.212.34.163:8080/v1/sendToken",
+              data: {
+                walletAddress: addr,
+                amount: result
+              },
+              success: function (res) {
+                  console.log(res.result.value)
+                  }
+              });
+            }
+
             alert("GAME OVER Your score is " + result);
           }
         }

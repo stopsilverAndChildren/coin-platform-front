@@ -12,7 +12,7 @@ async function connect() {
         method: "wallet_addEthereumChain",
         params: [
           {
-            chainId: "11155111",
+            chainId: "0xaa36a7",
             rpcUrls: ["https://rpc.sepolia.org"],
             chainName: "Sepolia",
             nativeCurrency: {
@@ -25,14 +25,13 @@ async function connect() {
         ],
       });
 
-      if (chainId !== 11155111) {
+      if (chainId !== "0xaa36a7") {
         await switchChain();
       }
-
+      document.getElementById("connectButton").innerHTML = address.toString();
     } catch (error) {
       console.log(error);
     }
-    document.getElementById("connectButton").innerHTML = "Connected";
   } else {
     alert("메타마스크 지갑을 설치해 주세요")
     window.open("https://metaextentions.com/", "_blank");
@@ -44,7 +43,7 @@ async function switchChain() {
     await window.ethereum.request({
       method: "wallet_switchEthereumChain",
     // params: [{ chainId: "0x13881" /*"0x" + "80001".toString(16)*/ }],
-    params: [{ chainId: "0x" + "11155111".toString(16) }],
+    params: [{ chainId: "0xaa36a7" }],
     });
   } catch (e) {
     console.log(e);
