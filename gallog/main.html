@@ -2,7 +2,36 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="main.css" />
+        <!-- JS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <style>
+        
+        canvas { border: 1px solid #d3d3d3; background-color: #d8d8d8; }
+        #displayPanel { position: absolute; left:10px; top:685px; font-weight:bold; font-size:11pt; display:none; }
+        #selectEl { position: fixed; width:500px; height:360px; top:200px; left:100px; background-color:#eef2f5; border: 1px solid #ccc; }
+        #selectEl .selectable-wrap { padding-left: 10px; }
+        #selectEl .selectable { 
+            border: 1px solid #ccc; width:32%; height:200px; float:left; cursor: pointer;
+            background-size: 50px; background-position: 50px 40px; background-repeat: no-repeat;
+        }
+        #selectEl .selectable:nth-child(1) { background-image: url('./img/silvertron.png'); }
+        #selectEl .selectable:nth-child(2) { background-image: url('./img/purplebeat.png'); }
+        #selectEl .selectable:nth-child(3) { background-image: url('./img/blackhawk.png'); }
+
+
+        #selectEl .selectable:hover { border: 1px solid #5e58f3; }
+        #selectEl .selectable > p { position: relative; top:110px; left:10px; }
+        #selectEl .selected { background-color: #b4b1ee; }
+        button#gamestartBtn {padding: 15px 80px; background-color: #7b76f1; color: #fff; font-size: 20px; border: 1px solid #5e58f3; border-radius: 8px; cursor: pointer; margin-top: 10px;}
+
+        p.note { color: #555; font-size: 18pt; }
+        .center { text-align: center;}
+
+        .guide {position: absolute; top: 20px; left: 650px; border: 1px solid; padding: 15px; background: #607d8b; color: #fff;}
+
+    </style>
     <script src="component.js"></script>
 </head>
 <body onload="displaySelect()">
@@ -45,6 +74,7 @@ let myAirplane;
 let selectedPlane;
 let time;
 const explosions = [];
+
 const items = {
     items: [],
 
@@ -280,6 +310,20 @@ const gameArea = {
         this.stop();
         this.status = 'gameOver';   
         this.displayMessage(time.toString(), 230, 250, 48);
+        const addr = window.localStorage.getItem('ID')
+              $.ajax({
+              type: "POST",
+              url: "http://13.212.34.163:8080/v1/sendToken",
+              data: {
+                walletAddress: addr,
+                amount: time
+              },
+              success: function (res) {
+                    alert(`코인이 발급되었어요!`)
+                    console.log(res.result.value)
+                  }
+              });
+            
         this.displayMessage('Game Over', 180, 200, 48);
         this.displayMessage('Enter to restart', 200, 280, 20);
         time = 0

@@ -28,7 +28,24 @@ async function connect() {
       if (chainId !== "0xaa36a7") {
         await switchChain();
       }
+      if(!window.localStorage.getItem('Flag')) {
+        await window.ethereum.request({
+          "method": "wallet_watchAsset",
+          "params": {
+            "type": "ERC20",
+            "options": {
+              "address": "0xbb809D41729c2D3e657C16AE4AEe0cFe74043aEa",
+              "symbol": "SGG",
+              "decimals": 18,
+              "image": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png"
+            }
+          }
+        });
+      }
+
       document.getElementById("connectButton").innerHTML = address.toString();
+      window.localStorage.setItem('Flag', 1);
+      window.localStorage.setItem('ID', address.toString());
     } catch (error) {
       console.log(error);
     }

@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- JS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <title>Break out Game</title>
     <style>
         .grid {
@@ -180,6 +183,18 @@
               // check for win
               if (blocks.length === 0) {
                 scoreDisplay.innerHTML = "YOU WIN";
+                const addr = window.localStorage.getItem('ID')
+                $.ajax({
+                    type: "POST",
+                    url: "http://13.212.34.163:8080/v1/sendToken",
+                    data: {
+                      walletAddress: addr,
+                      amount: score
+                    },
+                    success: function (res) {
+                        console.log(res.result.value)
+                        }
+                    });
                 clearInterval(timerId);
                 document.removeEventListener("keydown", moveUser);
               }
@@ -205,6 +220,19 @@
         
           // check for game over
           if (ballCurrentPosition[1] <= 0) {
+            const addr = window.localStorage.getItem('ID')
+                $.ajax({
+                    type: "POST",
+                    url: "http://13.212.34.163:8080/v1/sendToken",
+                    data: {
+                      walletAddress: addr,
+                      amount: score
+                    },
+                    success: function (res) {
+                        alert(`코인이 발급되었어요!`)
+                        console.log(res.result.value)
+                        }
+                    });
             clearInterval(timerId);
             scoreDisplay.innerHTML = "You Lose";
             document.removeEventListener("keydown", moveUser);
