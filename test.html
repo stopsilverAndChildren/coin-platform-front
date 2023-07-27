@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <!-- JS -->
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+     <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="a()">보내기</button>
+</body>
+    <script>
+        function a(){
+
+    console.log("누름");
+    console.log("요청보냄");
+    $.ajax({
+  url: 'http://13.208.178.14:8080/v1/sendToken',
+  type: 'POST',
+  data: JSON.stringify({
+    "walletAddress": "0xac459378dF52362C7476F0CD547ff07138922d9b",
+    "amount": "10000"
+  } ),
+  contentType: 'application/json',
+  dataType: 'json',
+  success: function (res) {
+    // alert('코인이 발급되었어요!');
+    console.log("요청성공");
+  },
+  error: function (err) {
+    console.log('요청 실패:', err);
+  },
+  timeout: 30000
+});   
+        }
+    </script>
+</html>
+
+

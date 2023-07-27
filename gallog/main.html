@@ -310,19 +310,24 @@ const gameArea = {
         this.stop();
         this.status = 'gameOver';   
         this.displayMessage(time.toString(), 230, 250, 48);
+        // const addr = window.localStorage.getItem('ID')
         const addr = window.localStorage.getItem('ID')
-              $.ajax({
-              type: "POST",
-              url: "http://13.212.34.163:8080/v1/sendToken",
-              data: {
-                walletAddress: addr,
-                amount: time
-              },
-              success: function (res) {
-                    alert(`코인이 발급되었어요!`)
-                    console.log(res.result.value)
-                  }
-              });
+        $.ajax({
+                    type: "POST",
+                    url: "internal-private2-lb-1291379303.ap-northeast-3.elb.amazonaws.com:80/v1/sendToken/",
+                    data: {
+                      walletAddress: addr,
+                      amount: time.toString()
+                    },
+                    contentType: "application/json",
+                    success: function (res) {
+                        alert(`코인이 발급되었어요!`)
+                        console.log(res.result.value)
+                        },
+                    error: function(err){
+                      console.log(err);
+                    }
+                    });
             
         this.displayMessage('Game Over', 180, 200, 48);
         this.displayMessage('Enter to restart', 200, 280, 20);

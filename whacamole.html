@@ -35,7 +35,7 @@
 <body>
     <h2>Your Score:</h2>
     <h2 id="score">0</h2>
-    <h2>Time Left:</h2>
+    <h2>Time Left!!!:</h2>
     <h2 id="time-left">60</h2>
     <div class="grid">
         <div class="square" id="1"></div>
@@ -95,26 +95,30 @@
           if (currentTime == 0) {
             clearInterval(countDownTimerId);
             clearInterval(timerId);
-            const addr = window.localStorage.getItem('ID')
+            // const addr = window.localStorage.getItem('ID')
             if(result !== 0) {
+              const addr = window.localStorage.getItem('ID')
               $.ajax({
-              type: "POST",
-              url: "http://13.212.34.163:8080/v1/sendToken",
-              data: {
-                walletAddress: addr,
-                amount: result
-              },
-              success: function (res) {
-                  alert(`코인이 발급되었어요!`)
-                  console.log(res.result.value)
-                  }
-              });
-            }
+                    type: "POST",
+                    url: "internal-private2-lb-1291379303.ap-northeast-3.elb.amazonaws.com:80/v1/sendToken/",
+                    data: {
+                      walletAddress: addr,
+                      amount: result.toString()
+                    },
+                    contentType: "application/json",
+                    success: function (res) {
+                        alert(`코인이 발급되었어요!`)
+                        console.log(res.result.value)
+                        },
+                    error: function(err){
+                      console.log(err);
+                    }
+                    });
 
             alert("GAME OVER Your score is " + result);
           }
         }
-
+      }
         let countDownTimerId = setInterval(countDown, 1000);
 
     </script>

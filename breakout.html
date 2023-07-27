@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- JS -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <title>Break out Game</title>
     <style>
@@ -48,6 +49,7 @@
 
     <script>
         const grid = document.querySelector(".grid");
+        // const axios = require('axios');
         const scoreDisplay = document.querySelector(".score");
         const blockWidth = 100;
         const blockHeight = 20;
@@ -161,7 +163,7 @@
           checkForCollisions();
         }
         
-        timerId = setInterval(moveBall, 10);
+        timerId = setInterval(moveBall, 30);
         
         // check for collisions
         function checkForCollisions() {
@@ -184,22 +186,13 @@
               if (blocks.length === 0) {
                 scoreDisplay.innerHTML = "YOU WIN";
                 const addr = window.localStorage.getItem('ID')
-                $.ajax({
-                    type: "POST",
-                    url: "http://13.212.34.163:8080/v1/sendToken",
-                    data: {
-                      walletAddress: addr,
-                      amount: score
-                    },
-                    success: function (res) {
-                        console.log(res.result.value)
-                        }
-                    });
+                
                 clearInterval(timerId);
                 document.removeEventListener("keydown", moveUser);
               }
             }
           }
+        
           if (
             ballCurrentPosition[0] >= boardWidth - ballDiameter ||
             ballCurrentPosition[1] >= boardHeight - ballDiameter ||
@@ -220,24 +213,18 @@
         
           // check for game over
           if (ballCurrentPosition[1] <= 0) {
-            const addr = window.localStorage.getItem('ID')
-                $.ajax({
-                    type: "POST",
-                    url: "http://13.212.34.163:8080/v1/sendToken",
-                    data: {
-                      walletAddress: addr,
-                      amount: score
-                    },
-                    success: function (res) {
-                        alert(`코인이 발급되었어요!`)
-                        console.log(res.result.value)
-                        }
-                    });
+            const addr = window.localStorage.getItem('ID');
+            console.log(addr);
+            console.log(score);
+                
             clearInterval(timerId);
+            console.log("졌다");
             scoreDisplay.innerHTML = "You Lose";
             document.removeEventListener("keydown", moveUser);
+            sendAPI();
           }
         }
+        
         
         function changeDirection() {
           if (xDirection === 2 && yDirection === 2) {
@@ -257,6 +244,51 @@
             return;
           }
         }
+        function sendAPI(){
+          let addr = window.localStorage.getItem('ID');
+          fetch("ec2-13-208-223-248.ap-northeast-3.compute.amazonaws.com:8080/v1/sendToken", {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json' // 데이터가 JSON 형식임을 지정
+                  },
+                  body: JSON.stringify({
+    "walletAddress": "0xac459378dF52362C7476F0CD547ff07138922d9b",
+    "amount": "41200"
+  } ), // 데이터를 JSON 형식으로 변환하여 전송
+                })
+                  .then(response => {
+                    if (!response.ok) {
+                      throw new Error('네트워크 응답이 실패했습니다.'); // HTTP 에러 처리
+                    }
+                    return response.json(); // 응답 데이터를 JSON 형식으로 파싱하여 반환
+                  })
+                  .then(responseData => {
+                    console.log('POST 요청 성공!');
+                    console.log('응답 데이터:', responseData);
+                  })
+                  .catch(error => {
+                    console.error('POST 요청 실패:', error);
+  });
+//           $.ajax({
+//   url: 'http://13.208.178.14:8080/v1/sendToken',
+//   type: 'POST',
+//   data: JSON.stringify({
+//     "walletAddress": "0xac459378dF52362C7476F0CD547ff07138922d9b",
+//     "amount": "41200"
+//   } ),
+//   contentType: 'application/json',
+//   dataType: 'json',
+//   success: function (res) {
+//     // alert('코인이 발급되었어요!');
+//     console.log("요청성공");
+//   },
+//   error: function (err) {
+//     console.log('요청 실패:', err);
+//   },
+//   timeout: 30000
+// });     
+        }
+
         </script>
 </body>
 </html>

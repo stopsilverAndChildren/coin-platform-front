@@ -87,7 +87,7 @@
 
 <body>
     <div class="navbar">
-        <div>잠실지주 정지은</div>
+        <div>aaa</div>
         <div class="navbar-right">
  
             <button
@@ -97,7 +97,10 @@
                 id="connectButton"
                 class="navbar-button login-button"
             >
-                로그인
+                LogIn
+            </button>
+            <button onclick="sendAPI()">
+                ac
             </button>
         </div>
     </div>
@@ -107,6 +110,51 @@
         <a href="/gallog/main.html" class="navbar-button button-2"></a>
         <a href="/breakout.html" class="navbar-button button-3" style="background: url(./src/img/break.jpg); background-size: contain;"></a>
     </div>
-    <script src="./src/dist/bundle.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        function sendAPI(){
+          let addr = window.localStorage.getItem('ID');
+          axios({
+    method: "post", // 통신 방식
+    url: 'http://13.208.178.14:8080/v1/sendToken', // 서버
+    headers: {'X-Requested-With': 'XMLHttpRequest'}, // 요청 헤더 설정
+    data: JSON.stringify({
+    "walletAddress": "0xac459378dF52362C7476F0CD547ff07138922d9b",
+    "amount": "41200"
+  } ),
+    responseType: 'json'
+    
+    
+   
+   
+})
+.then(function (response) {
+    // response Action
+});
+//           $.ajax({
+//   url: 'http://13.208.178.14:8080/v1/sendToken',
+//   type: 'POST',
+//   data: JSON.stringify({
+//     "walletAddress": "0xac459378dF52362C7476F0CD547ff07138922d9b",
+//     "amount": "41200"
+//   } ),
+//   contentType: 'application/json',
+//   dataType: 'json',
+//   success: function (res) {
+//     // alert('코인이 발급되었어요!');
+//     console.log("요청성공");
+//   },
+//   error: function (err) {
+//     console.log('요청 실패:', err);
+//   },
+//   timeout: 30000
+// });     
+}
+    </script>
+             
+
+
+    
 </body>
 </html>
